@@ -11,9 +11,9 @@ class Book:
 
     def giveInfo(self):
         if self.isBorrowed == False:
-            print(f"{self.title} by {self.author} - available")
+            print(f"{self.title} by {self.author.name} - available")
         if self.isBorrowed == True:
-            print(f"{self.title} by {self.author} - borrowed")
+            print(f"{self.title} by {self.author.name} - borrowed")
 
     def changeState(self, state):
         self.isBorrowed = state
