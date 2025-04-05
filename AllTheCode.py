@@ -69,6 +69,3 @@ while True:
     if  userOption == "4":
         print("\nClosing Library Menu...\n\n")
         exit()
-
-
-        
