@@ -1,3 +1,6 @@
+import sqlite3
+dataBase = sqlite3.connect("booksDataBase.db")
+
 class Author:
     def __init__(self, name):
         self.name = name
@@ -21,6 +24,10 @@ class Book:
 
 class Library:
     def __init__(self):
+        cursor = dataBase.cursor()
+        cursor.execute("CREATE TABLE books (title STRING, author STRING, status BOOLEAN)")
+        cursor.execute("INSERT INTO books VALUES ('Quest Of The Sunfish - Escape To The Moon Islands', Mardi McConnochie)")
+
         self.books = [Book("Quest Of The Sunfish - Escape To The Moon Islands", Author("Mardi McConnochie")),
                       Book("How To Survive On Mars", Author("Jasmina Lazendic-Galloway")),
                       Book("One Piece - Volume 1",Author("Eiichiro Oda")),
