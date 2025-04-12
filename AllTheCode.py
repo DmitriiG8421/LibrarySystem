@@ -21,20 +21,6 @@ class Book:
     def changeState(self, state):
         self.isBorrowed = state
 
-
-        cursor = dataBase.cursor()
-        cursor.execute("CREATE TABLE books (title STRING, author STRING, status BOOLEAN)")
-
-        cursor.execute("INSERT INTO books VALUES ('Quest Of The Sunfish - Escape To The Moon Islands', Mardi McConnochie, False)")
-        cursor.execute("INSERT INTO books VALUES ('How To Survive On Mars', 'Jasmina Lazendic-Galloway', False)")
-        cursor.execute("INSERT INTO books VALUES ('One Piece - Volume 1','Eiichiro Oda',False)")
-        cursor.execute("INSERT INTO books VALUES ('Harry Potter and the Philosopher's Stone','J. K. Rowling',False)")
-        cursor.execute("INSERT INTO books VALUES ('The Lord of the Rings','John Ronald Reuel Tolkien',False)")
-        
-        cursor.execute("SELECT * FROM books")
-        print(cursor.fetchall())
-
-
 class Library:
     def __init__(self):
 
