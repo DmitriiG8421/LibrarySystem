@@ -1,6 +1,3 @@
-import sqlite3
-dataBase = sqlite3.connect("booksDataBase.db")
-
 class Author:
     def __init__(self, name):
         self.name = name
