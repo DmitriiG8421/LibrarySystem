@@ -1,5 +1,7 @@
 import sqlite3
-dataBase = sqlite3.connect("booksDataBase.db")
+
+connection = sqlite3.connect("booksDataBase.db")
+connection.row_factory = sqlite3.Row
 
 class Author:
     def __init__(self, name):
@@ -22,16 +24,6 @@ class Book:
         self.isBorrowed = state
 
 
-cursor = dataBase.cursor()
-cursor.execute("CREATE TABLE books (title STRING, author STRING, status BOOLEAN)")
-cursor.execute("INSERT INTO books VALUES ('Quest Of The Sunfish - Escape To The Moon Islands', Mardi McConnochie, False)")
-cursor.execute("INSERT INTO books VALUES ('How To Survive On Mars', 'Jasmina Lazendic-Galloway', False)")
-cursor.execute("INSERT INTO books VALUES ('One Piece - Volume 1','Eiichiro Oda',False)")
-cursor.execute("INSERT INTO books VALUES ('Harry Potter and the Philosopher's Stone','J. K. Rowling',False)")
-cursor.execute("INSERT INTO books VALUES ('The Lord of the Rings','John Ronald Reuel Tolkien',False)")
-        
-cursor.execute("SELECT * FROM books")
-print(cursor.fetchall())
 
 
 class Library:
@@ -54,34 +46,71 @@ class Library:
 
 
 
-myLibrary = Library()
-print("Library menu:")
-while True:
-    userOption = input(" \nOption 1: Display the books.\n Option 2: Borrow a book.\n Option 3: Return a book.\n Option 4: Exit.\n Choose option(1-4):")
+cursor = connection.cursor()
+cursor.execute("DROP TABLE IF EXISTS books")
+cursor.execute("CREATE TABLE books (id INT, title STRING, author STRING, isBorrowed BOOLEAN)")
 
-    if userOption == "1":
-        myLibrary.displayBooks()
+cursor.execute("""
+                  INSERT INTO books VALUES 
+                  ('1','Quest Of The Sunfish - Escape To The Moon Islands', 'Mardi McConnochie', True),
+                  ('2','How To Survive On Mars', 'Jasmina Lazendic-Galloway', False),
+                  ('3','One Piece - Volume 1','Eiichiro Oda',False),
+                  ('4','Harry Potter and the Philosopher''s Stone','J. K. Rowling',False),
+                  ('5','The Lord of the Rings','John Ronald Reuel Tolkien',False)
+               """)
+connection.commit()
+cursor.close()
 
-    if userOption == "2":
-        myLibrary.displayBooks()
-        userBook = int(input("Please enter the number for your book: "))
-        bookchosen = myLibrary.books[userBook-1]
-        if bookchosen.isBorrowed == False:
-            bookchosen.changeState(True)
-            print(f"You have borrowed {bookchosen.title}.\n")
-        else:
-            print(f"{bookchosen.title} is already borrowed.")
+def displayAllBooks():
+    cursor = connection.cursor()
+    cursor.execute("SELECT * FROM books")
+    for row in cursor:
+           print(f'title: {row["title"]} - {row["author"]}')
+    print("\n\n\n")
+    cursor.close()
+displayAllBooks()
 
-    if userOption == "3":
-        myLibrary.displayBooks()
-        userBook = int(input("Please enter the number for your book: "))
-        bookchosen = myLibrary.books[userBook-1]
-        if bookchosen.isBorrowed == True:
-            bookchosen.changeState(False)
-            print(f"You have returned {bookchosen.title}.\n")
-        else:
-            print(f"{bookchosen} is not borrowed.")
+def diaplayAvailableBooks():
+    cursor = connection.cursor()
+    cursor.execute("SELECT title,isBorrowed,author FROM books WHERE isBorrowed = False")
+    for row in cursor:
+           print(f'"{row["title"]}" by {row["author"]} is available for borrowing')
+    print("\n\n\n")
+    cursor.close()
+diaplayAvailableBooks()
 
-    if  userOption == "4":
-        print("\nClosing Library Menu...\n\n")
-        exit()
+
+
+# myLibrary = Library()
+# print("Library menu:")
+# while True:
+#     userOption = input(" \nOption 1: Display the books.\n Option 2: Borrow a book.\n Option 3: Return a book.\n Option 4: Exit.\n Choose option(1-4):")
+
+#     if userOption == "1":
+#         myLibrary.displayBooks()
+
+#     if userOption == "2":
+#         myLibrary.displayBooks()
+#         userBook = int(input("Please enter the number for your book: "))
+#         bookchosen = myLibrary.books[userBook-1]
+#         if bookchosen.isBorrowed == False:
+#             bookchosen.changeState(True)
+#             print(f"You have borrowed {bookchosen.title}.\n")
+#         else:
+#             print(f"{bookchosen.title} is already borrowed.")
+
+#     if userOption == "3":
+#         myLibrary.displayBooks()
+#         userBook = int(input("Please enter the number for your book: "))
+#         bookchosen = myLibrary.books[userBook-1]
+#         if bookchosen.isBorrowed == True:
+#             bookchosen.changeState(False)
+#             print(f"You have returned {bookchosen.title}.\n")
+#         else:
+#             print(f"{bookchosen} is not borrowed.")
+
+#     if  userOption == "4":
+#         print("\nClosing Library Menu...\n\n")
+#         exit()
+
+
